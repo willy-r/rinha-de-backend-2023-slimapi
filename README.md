@@ -2,5 +2,8 @@
 
 To run:
 ```bash
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+python -m venv venv
+source venv/bin/activate
+(venv) pip install -r requirements.txt
+(venv) gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
 ```
