@@ -99,7 +99,7 @@ async def find_by_term(t: str = Query(..., min_length=1)):
     async with await get_database_pool() as pool:
         async with pool.acquire() as conn:
             results = await conn.fetch(
-                'SELECT * FROM pessoas WHERE apelido ILIKE $1 OR nome ILIKE $2 OR $3 ILIKE ANY(stack)',
+                'SELECT * FROM pessoas WHERE apelido ILIKE $1 OR nome ILIKE $2 OR $3 ILIKE ANY(stack) LIMIT 50',
                 f'%{t}%',
                 f'%{t}%',
                 t,
