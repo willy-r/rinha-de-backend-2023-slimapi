@@ -33,6 +33,23 @@ services:
     ports:
       - "6379:6379"
 
+  # nginx:
+  #   image: nginx:latest
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #   depends_on:
+  #     - spring-api1
+  #     - spring-api2
+  #   ports:
+  #     - "9999:9999"
+  #   # deploy:
+  #   #   resources:
+  #   #     limits:
+  #   #       cpus: '0.1'
+  #   #       memory: '0.1GB'
+  #   # networks:
+  #   #   - app-network
+
 
 # networks:
 #   app-network:

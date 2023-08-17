@@ -8,11 +8,11 @@ from sqlalchemy import create_engine, Column, Uuid, String, Date, ARRAY, or_, ca
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 import redis
 
-app = FastAPI()
+import settings
 
+app = FastAPI(title='Rinha de Back-end 2023')
 
-DATABASE_URL = 'postgresql://postgres:postgres@localhost/postgres'
-engine = create_engine(DATABASE_URL)
+engine = create_engine(settings.DATABASE_URL, pool_size=settings.DATABASE_MAX_CONNECTIONS)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -32,6 +32,8 @@ def get_session():
     try:
         yield session
     finally:
+        # This will handle closing the session whatever it happens on request
+        # when using Depends of FastAPI on a route function.
         session.close()
 
 
