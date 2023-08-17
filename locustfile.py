@@ -1,4 +1,5 @@
 import random
+from uuid import uuid4
 from dataclasses import dataclass, asdict
 
 from faker import Faker
@@ -41,22 +42,22 @@ def generate_random_pessoa() -> Pessoa:
 
 
 class PessoaLoadTesting(HttpUser):
-    host = 'http://localhost:8000'
+    host = 'http://localhost:9999'
     wait_time = constant(1)
 
     @task
-    def create_and_get_pessoa(self):
+    def create_and_get_pessoa_success(self):
         post_res = self.client.post(
             '/pessoas',
             json=asdict(generate_random_pessoa()),
-            name='/create-pessoa'
+            name='/create-pessoa-success'
         )
         if not post_res.ok:
             return
         pessoa_location = post_res.headers.get('location')
-        self.client.get(pessoa_location, name='/get-pessoa-by-id')
+        self.client.get(pessoa_location, name='/get-pessoa-by-id-success')
 
     @task(3)
-    def get_pessoas_by_search_term(self):
+    def get_pessoas_by_search_term_success(self):
         search_term = random.choice(programming_languages)
-        self.client.get(f'/pessoas?t={search_term}', name='/get-pessoas-by-search-term')
+        self.client.get(f'/pessoas?t={search_term}', name='/get-pessoas-by-search-term-success')

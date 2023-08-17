@@ -4,6 +4,7 @@ venv/
 .python-version
 build_push.sh
 run.sh
+stop.sh
 locustfile.py
 nginx.conf
 requirements-dev.txt

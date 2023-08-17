@@ -1,5 +1,4 @@
 version: '3.9'
-name: 'rinha-de-backend'
 
 services:
   slimapi1:
@@ -12,47 +11,47 @@ services:
       - CACHE_HOST=cache-redis
       
       - GUNICORN_BIND=0.0.0.0:8000
-      - GUNICORN_WORKERS=5
-      - GUNICORN_KEEPALIVE=8
+      - GUNICORN_WORKERS=2
+      - GUNICORN_KEEPALIVE=4
       - GUNICORN_FORWARDED_ALLOW_IPS=*
     depends_on:
-      db-postgresq:
+      db-postgresql:
         condition: service_healthy
       cache-redis:
         condition: service_healthy
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '0.3'
-    #       memory: '0.7GB'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.4'
+          memory: '0.6GB'
     networks:
       - rinha-network
 
-    slimapi2:
-      image: willrodrigues/rinha-slimapi:latest
-      hostname: slimapi2
-      environment:
-        - DATABASE_URL=postgresql://postgres:postgres@db-postgresql/postgres
-        - DATABASE_MAX_CONNECTIONS=50
+  slimapi2:
+    image: willrodrigues/rinha-slimapi:latest
+    hostname: slimapi2
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db-postgresql/postgres
+      - DATABASE_MAX_CONNECTIONS=50
 
-        - CACHE_HOST=cache-redis
-        
-        - GUNICORN_BIND=0.0.0.0:8000
-        - GUNICORN_WORKERS=5
-        - GUNICORN_KEEPALIVE=8
-        - GUNICORN_FORWARDED_ALLOW_IPS=*
-      depends_on:
-        db-postgresq:
-          condition: service_healthy
-        cache-redis:
-          condition: service_healthy
-      # deploy:
-      #   resources:
-      #     limits:
-      #       cpus: '0.3'
-      #       memory: '0.7GB'
-      networks:
-        - rinha-network
+      - CACHE_HOST=cache-redis
+      
+      - GUNICORN_BIND=0.0.0.0:8000
+      - GUNICORN_WORKERS=2
+      - GUNICORN_KEEPALIVE=4
+      - GUNICORN_FORWARDED_ALLOW_IPS=*
+    depends_on:
+      db-postgresql:
+        condition: service_healthy
+      cache-redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.4'
+          memory: '0.6GB'
+    networks:
+      - rinha-network
 
   db-postgresql:
     image: postgres:15.2-alpine
@@ -66,16 +65,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-    # deploy:
-    #   restart_policy:
-    #     condition: on-failure
-    #     delay: 5s
-    #     max_attempts: 3
-    #     window: 60s
-    #   resources:
-    #     limits:
-    #       cpus: '0.8'
-    #       memory: '1.5GB'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+          memory: '1.3GB'
     networks:
       - rinha-network
   
@@ -86,6 +80,11 @@ services:
       interval: 3s
       timeout: 5s
       retries: 10
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: '0.5GB'
     networks:
     - rinha-network
 
@@ -98,11 +97,11 @@ services:
       - slimapi2
     ports:
       - "9999:9999"
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '0.1'
-    #       memory: '0.1GB'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: '0.1GB'
     networks:
       - rinha-network
 
