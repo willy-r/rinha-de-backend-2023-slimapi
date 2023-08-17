@@ -1,0 +1,10 @@
+__pycache__/
+venv/
+.gitignore
+.python-version
+build_push.sh
+run.sh
+locustfile.py
+nginx.conf
+requirements-dev.txt
+README.md

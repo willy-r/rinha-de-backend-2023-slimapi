@@ -10,8 +10,13 @@ import redis
 
 import settings
 
+# FastAPI
 app = FastAPI(title='Rinha de Back-end 2023')
 
+# Redis
+cache = redis.StrictRedis(host=settings.CACHE_HOST, port=settings.CACHE_PORT, decode_responses=True)
+
+# SQLAlchemy
 engine = create_engine(settings.DATABASE_URL, pool_size=settings.DATABASE_MAX_CONNECTIONS)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -35,9 +40,6 @@ def get_session():
         # This will handle closing the session whatever it happens on request
         # when using Depends of FastAPI on a route function.
         session.close()
-
-
-cache = redis.StrictRedis(host='localhost', port=6379, decode_responses=True)
 
 
 @app.on_event('startup')
@@ -86,7 +88,7 @@ async def find_by_id(id: str, session: Session = Depends(get_session)):
             "id": id,
             **deserialize(cached_pessoa),
         }
-    pessoa = session.query(PessoaModel).filter_by(id=id).first()
+    pessoa = session.query(PessoaModel).get(id)
     if pessoa:
         pessoa_data = dict(pessoa)
         cache.set(pessoa_data['id'], serialize(pessoa_data))
