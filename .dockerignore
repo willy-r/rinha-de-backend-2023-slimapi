@@ -1,6 +1,7 @@
 __pycache__/
 venv/
 .gitignore
+.git/
 .python-version
 build_push.sh
 run.sh
