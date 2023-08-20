@@ -1,5 +1,4 @@
 import random
-from uuid import uuid4
 from dataclasses import dataclass, asdict
 
 from faker import Faker

@@ -15,6 +15,11 @@ sh run.sh
 
 API disponível em: [localhost:9999](http://localhost:9999)
 
+Para parar:
+```bash
+sh stop.sh
+```
+
 
 ## Testes de carga
 
@@ -29,7 +34,7 @@ source venv/bin/activate
 2. Instale as dependências e rode o teste de carga com o [`Locust`](https://locust.io/):
 ```bash
 pip install -r requirements-dev.txt
-locust
+locust -f ./api_load_testing/locustfile.py
 ```
 
 3. Acesse o dashboard em [`localhost:8089`](http://localhost:8089) e defina a quantidade de usuários simultâneos que você quer acessando a API (teste com 100 inicialmente rs)

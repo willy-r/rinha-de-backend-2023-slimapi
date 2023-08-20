@@ -43,9 +43,7 @@ def get_session():
         session.close()
 
 
-@app.on_event('startup')
-def app_startup_event():
-    Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 
 @app.on_event('shutdown')
